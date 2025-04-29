@@ -43,8 +43,8 @@ await at.signAuthEntries({
 
         const signature = contract.spec.nativeToScVal(
             [new Map([[
-                {tag: "Ed25519", values: [keypair.rawPublicKey()]} as SignerKey,
-                {tag: "Ed25519", values: [keypair.sign(payload)]} as Signature
+                { tag: "Ed25519", values: [keypair.rawPublicKey()] } as SignerKey,
+                { tag: "Ed25519", values: [keypair.sign(payload)] } as Signature
             ]])] as Signatures,
             xdr.ScSpecTypeDef.scSpecTypeUdt(
                 new xdr.ScSpecTypeUdt({ name: "Signatures" }),
