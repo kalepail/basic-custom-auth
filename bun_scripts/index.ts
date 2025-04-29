@@ -82,6 +82,7 @@ const send_res = await rpc.sendTransaction(transaction);
 
 if (send_res.status === 'PENDING') {
     const poll_res = await rpc.pollTransaction(send_res.hash);
+    
     if (poll_res.status === 'SUCCESS') {
         console.log(poll_res.status, poll_res.txHash);
     } else {
