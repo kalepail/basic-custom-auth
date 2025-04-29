@@ -3,7 +3,8 @@ import { Api, assembleTransaction, Server } from "@stellar/stellar-sdk/rpc";
 
 const CONTRACT_ID = 'CBXYCAVTG6ZTZVFTRKNMU7SLZNJ632PEJEHHMMF7Q6664YHTFQXLBJP3'
 
-const rpc = new Server("https://soroban-testnet.stellar.org");
+const rpcUrl = "https://soroban-testnet.stellar.org";
+const rpc = new Server(rpcUrl);
 
 const keypair = Keypair.fromSecret('SABZEN64W566LAY4Q7BNDRG7SCSU76SZ53PNFWKUDLE77IFFKJVQ2A2T')
 const pubkey = keypair.publicKey();
@@ -82,7 +83,7 @@ const send_res = await rpc.sendTransaction(transaction);
 
 if (send_res.status === 'PENDING') {
     const poll_res = await rpc.pollTransaction(send_res.hash);
-    
+
     if (poll_res.status === 'SUCCESS') {
         console.log(poll_res.status, poll_res.txHash);
     } else {
