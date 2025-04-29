@@ -10,6 +10,7 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "@stellar/stellar-sdk": "^13.3.0"
+    "@stellar/stellar-sdk": "^13.3.0",
+    "hello-world-sdk": "link:hello-world-sdk"
   }
 }
