@@ -53,7 +53,7 @@ impl CustomAccountInterface for Contract {
         signatures: Signatures,
         _auth_contexts: Vec<Context>,
     ) -> Result<(), Errors> {
-        if signatures.0.len() < 1 {
+        if signatures.0.is_empty() {
             return Err(Errors::TooFewSignatures);
         }
 
