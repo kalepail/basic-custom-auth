@@ -22,7 +22,7 @@ impl Contract {
 #[contracterror]
 #[derive(Copy, Clone, Debug, PartialEq)]
 pub enum Errors {
-    Unknown = 1,
+    TooFewSignatures = 1,
 }
 
 #[contracttype]
@@ -53,6 +53,10 @@ impl CustomAccountInterface for Contract {
         signatures: Signatures,
         _auth_contexts: Vec<Context>,
     ) -> Result<(), Errors> {
+        if signatures.0.len() < 1 {
+            return Err(Errors::TooFewSignatures);
+        }
+
         for signature in signatures.0.iter() {
             let public_key = match signature.0 {
                 SignerKey::Ed25519(ref key) => key,
