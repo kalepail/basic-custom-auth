@@ -1,7 +1,7 @@
 import { xdr, Keypair, Networks, hash } from "@stellar/stellar-sdk";
 import { basicNodeSigner } from "@stellar/stellar-sdk/contract";
 import { Server } from "@stellar/stellar-sdk/rpc";
-import { Client } from 'hello-world-sdk'
+import { Client, type Signature, type Signatures, type SignerKey } from 'hello-world-sdk'
 
 const CONTRACT_ID = 'CBXYCAVTG6ZTZVFTRKNMU7SLZNJ632PEJEHHMMF7Q6664YHTFQXLBJP3'
 
@@ -41,22 +41,17 @@ await at.signAuthEntries({
 
         const payload = hash(preimage.toXDR())
 
-        auth.credentials().address().signature(
-            xdr.ScVal.scvVec([
-                xdr.ScVal.scvMap([
-                    new xdr.ScMapEntry({
-                        key: xdr.ScVal.scvVec([
-                            xdr.ScVal.scvSymbol('Ed25519'),
-                            xdr.ScVal.scvBytes(keypair.rawPublicKey())
-                        ]),
-                        val: xdr.ScVal.scvVec([
-                            xdr.ScVal.scvSymbol('Ed25519'),
-                            xdr.ScVal.scvBytes(keypair.sign(payload))
-                        ])
-                    })
-                ])
-            ])
-        )
+        const signature = contract.spec.nativeToScVal(
+            [new Map([[
+                {tag: "Ed25519", values: [keypair.rawPublicKey()]} as SignerKey,
+                {tag: "Ed25519", values: [keypair.sign(payload)]} as Signature
+            ]])] as Signatures,
+            xdr.ScSpecTypeDef.scSpecTypeUdt(
+                new xdr.ScSpecTypeUdt({ name: "Signatures" }),
+            )
+        );
+
+        auth.credentials().address().signature(signature)
 
         return auth
     }
